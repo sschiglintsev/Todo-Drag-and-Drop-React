@@ -1,0 +1,43 @@
+.board {
+  height: 200px;
+  background-color: #EEEEEE;
+  border-right: 1px dotted;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+
+
+  .taskHeader {
+    display: flex;
+    background-color: coral;
+    width: 100%;
+  }
+
+  .inputNewTask {
+    width: 100px;
+  }
+
+  .tasksContainer {
+    display: flex;
+  }
+
+  .draggable {
+    width: 100px;
+    height: 100px;
+    background-color: yellow;
+    margin: 5px auto;
+
+    .buttonDelete {
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
