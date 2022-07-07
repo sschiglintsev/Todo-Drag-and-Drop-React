@@ -3,9 +3,19 @@ import {v1} from 'uuid';
 const initialState = {
     category: ["wip", "complete"],
     tasks: [
-        {id: v1(), name: "Learn Angular", descriptions: "Angular", category: "wip"},
-        {id: v1(), name: "React", descriptions: "React", category: "wip"},
-        {id: v1(), name: "Vue", descriptions: "Vue", category: "complete"}
+        {
+            id: v1(), name: "Learn Angular", descriptions: "Angular", category: "wip",
+            microTasks: [{microTaskId: v1(), microTaskTitle: 'TaskAngular'},
+                {microTaskId: v1(), microTaskTitle: 'TaskLearn'}]
+        },
+        {
+            id: v1(), name: "React", descriptions: "React", category: "wip",
+            microTasks: [{microTaskId: v1(), microTaskTitle: 'TaskReact'}]
+        },
+        {
+            id: v1(), name: "Vue", descriptions: "Vue", category: "complete",
+            microTasks: [{microTaskId: v1(), microTaskTitle: 'TaskVue'}]
+        }
     ]
 }
 
@@ -16,8 +26,33 @@ export const tasksReducer = (state = initialState, action) => {
                 id: v1(),
                 name: action.payload.name,
                 category: action.payload.category,
+                microTasks: []
             }
             return {...state, tasks: [...state.tasks, newTask]}
+        case 'ADD-MICRO-TASK':
+            const newMicroTask = {
+                microTaskId: v1(),
+                microTaskTitle: action.payload.title,
+            }
+            return {
+                ...state, tasks: state.tasks.map(el => {
+                    if (el.id === action.payload.id) {
+                        return {...el, microTasks: [...el.microTasks, newMicroTask]}
+                    } else {
+                        return el
+                    }
+                })
+            }
+        case 'DELETE-MICRO-TASK':
+            return {
+                ...state, tasks: state.tasks.map(el => {
+                    if (el.id === action.payload.idTask) {
+                        return {...el, microTasks: el.microTasks.filter(e=> e.microTaskId !== action.payload.idMicroTask)}
+                    } else {
+                        return el
+                    }
+                })
+            }
         case 'DELETE-TASK':
             return {...state, tasks: state.tasks.filter(el => el.id !== action.payload.id)}
         case 'CHANGE-CATEGORY':
@@ -82,10 +117,27 @@ export const addTaskAC = (name, category) => ({
         category,
     }
 })
+
+export const addMicroTaskAC = (id, title) => ({
+    type: 'ADD-MICRO-TASK',
+    payload: {
+        id,
+        title,
+    }
+})
+
 export const deleteTaskAC = (id) => ({
     type: 'DELETE-TASK',
     payload: {
         id
+    }
+})
+
+export const deleteMicroTaskAC = (idTask, idMicroTask) => ({
+    type: 'DELETE-MICRO-TASK',
+    payload: {
+        idTask,
+        idMicroTask
     }
 })
 

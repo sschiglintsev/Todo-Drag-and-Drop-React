@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import style from './Modal.module.css'
-import {useDispatch} from "react-redux";
-import {saveDescriptionsTaskAC, saveTitleTaskAC} from "../../Redux/tasksReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {addMicroTaskAC, deleteMicroTaskAC, saveDescriptionsTaskAC, saveTitleTaskAC} from "../../Redux/tasksReducer";
+import {MicroTask} from "../Task/MicroTask/MicroTask";
 
-export const Modal = ({isVisible = false, title, descriptions, onClose, id}) => {
+export const Modal = ({isVisible = false, title, descriptions, onClose, id,microTasks}) => {
     const dispatch = useDispatch()
+
+
 
     const keydownHandler = ({key}) => {
         switch (key) {
@@ -19,7 +22,9 @@ export const Modal = ({isVisible = false, title, descriptions, onClose, id}) => 
     const [isEditDescriptionsValue, setIsEditDescriptionsValue] = useState(false)
 
     const [titleValue, setTitleValue] = useState(title)
+    const [newMicroTaskTitleValue, setNewMicroTaskTitleValue] = useState('')
     const [descriptionsValue, setDescriptionsValue] = useState(descriptions)
+
 
     const isEditTitle = () => {
         setIsEditTitleValue(true)
@@ -28,6 +33,7 @@ export const Modal = ({isVisible = false, title, descriptions, onClose, id}) => 
     const isEditDescriptions = () => {
         setIsEditDescriptionsValue(true)
     }
+
     const saveTitle = () => {
         setIsEditTitleValue(false)
         dispatch(saveTitleTaskAC(id, titleValue))
@@ -42,8 +48,23 @@ export const Modal = ({isVisible = false, title, descriptions, onClose, id}) => 
         setTitleValue(e.currentTarget.value)
     }
 
+
     const changeDescriptionsValue = (e) => {
         setDescriptionsValue(e.currentTarget.value)
+    }
+
+    const changeMicroTaskValue = (e) => {
+        setNewMicroTaskTitleValue(e.currentTarget.value)
+    }
+
+    const addMicroTask = () => {
+        dispatch(addMicroTaskAC(id, newMicroTaskTitleValue))
+        setNewMicroTaskTitleValue('')
+    }
+
+    const deleteMicroTask = (microTaskId) => {
+
+        dispatch(deleteMicroTaskAC(id, microTaskId))
     }
 
     React.useEffect(() => {
@@ -78,6 +99,19 @@ export const Modal = ({isVisible = false, title, descriptions, onClose, id}) => 
                             <button onClick={() => isEditDescriptions()}>🖊️</button>
                         </div>
                     }
+                </div>
+                <div>
+                    MicroTasks
+                    <input placeholder="title" value={newMicroTaskTitleValue}
+                           onChange={changeMicroTaskValue}/>
+                    <button onClick={()=>addMicroTask()}>Add microTask </button>
+                    {microTasks.map(el=> {
+                        return (<div key={el.microTaskId}>
+                            <input type="checkbox"/>
+                            {el.microTaskTitle}
+                            <button onClick={()=> deleteMicroTask(el.microTaskId)} >delete microtask</button>
+                        </div>)
+                    })}
                 </div>
             </div>
         </div>

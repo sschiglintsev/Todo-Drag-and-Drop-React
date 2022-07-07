@@ -42,7 +42,7 @@ export const Task = (props) => {
                     </div>
                 </div>
 
-                <SetModal title={t.name} id={t.id} descriptions={t.descriptions}/>
+                <SetModal title={t.name} id={t.id} descriptions={t.descriptions} microTasks={t.microTasks}/>
                 <div>
                     <button onClick={() => deleteTask(t.id)}>delete</button>
                 </div>

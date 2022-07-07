@@ -13,6 +13,7 @@ export const SetModal = (props) => {
                 title={props.title}
                 descriptions={props.descriptions}
                 id={props.id}
+                microTasks={props.microTasks}
             />
         </div>
     );
